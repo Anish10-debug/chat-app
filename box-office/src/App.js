@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Navs from './components/Navs';
 import Home from './pages/Home';
 import Starred from './pages/Starred';
 
@@ -11,20 +10,17 @@ import Starred from './pages/Starred';
 
 function App() {
   return (
-    <div>
-      <Navs />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
+    <Switch>
+      <Route exact path="/">
+        <Home />
+      </Route>
 
-        <Route exact path="/starred">
-          <Starred />
-        </Route>
+      <Route exact path="/starred">
+        <Starred />
+      </Route>
 
-        <Route>This is 404 NOT FOUND</Route>
-      </Switch>
-    </div>
+      <Route>This is 404 NOT FOUND</Route>
+    </Switch>
   );
 }
 

@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // this is similar to hyperlink
 
 const LINKS = [
   //here an array of objects is created which contains the link
