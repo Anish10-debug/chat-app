@@ -1,25 +1,23 @@
 /*eslint-disable*/
 import React, { useState } from 'react';
 import MainPageLayout from '../components/MainPageLayout';
+import { apiGet } from '../misc/config';
 
 const Home = () => {
   const [input, setInput] = useState(''); //whatever we type in the textbox will be used as state
+  const [results, setResult] = useState(null); //to store the result
 
   const onInputChange = ev => {
     setInput(ev.target.value); //target.value will return the text we type
   };
 
   const onSearch = () => {
-    //https://api.tvmaze.com/search/shows?q=men
-    //fetch allows us to fetch the remote data
-    //fetch always returns a promise therefore we need to resolve it to get the actual value
-    //whatever is returned that should be converted to json and from the json we use another .then to get the result
     //NOTE: .then is always associated with a callback function to get the value
-    fetch(`http://api.tvmaze.com/search/shows?q=${input}`)
-      .then(returnedVal => returnedVal.json())
-      .then(result => {
-        console.log(result);
-      });
+    apiGet(`/search/shows?q=${input}`);
+    fetch(`http://api.tvmaze.com/search/shows?q=${input}`).then(result => {
+      setResult(result);
+      console.log(result);
+    });
   };
 
   //onKeyDown is an event which is means on key press
@@ -29,6 +27,25 @@ const Home = () => {
     if (ev.keyCode == 13) {
       onSearch();
     }
+  };
+
+  const renderResults = () => {
+    //if we search but the length of result is 0
+    if (results && results.length === 0) {
+      return <div>No results</div>;
+    }
+
+    if (results && results.length > 0) {
+      return (
+        <div>
+          {results.map(item => (
+            <div id={item.show.id}>{item.show.name}</div>
+          ))}
+        </div>
+      );
+    }
+
+    return null;
   };
 
   //value is stored as {input} which is the current state. On typing something the state will be changed
@@ -43,6 +60,7 @@ const Home = () => {
       <button type="button" onClick={onSearch}>
         Search
       </button>
+      {renderResults()}
     </MainPageLayout>
   );
 };
