@@ -27,15 +27,40 @@ import { apiGet } from '../misc/config';
 const Show = () => {
   // <Route exact path="/show/:id"></Route> is in Home.js (tvmaze has said to use :id for accessing id)
   const { id } = useParams(); //whatever is written after show/ in the url that will be stored in {id}
-  const [show, setShow] = useState(null);
+  const [show, setShow] = useState(null); //for storing the results of read more
+  const [isloading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`).then(results => {
-      setShow(results);
-    }); //we will fetch the seasons and cast
+    const isMounted = true; //check if component is mounted or not
+    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`)
+      .then(results => {
+        setTimeout(() => {
+          if (isMounted) {
+            setShow(results);
+            setIsLoading(false);
+          }
+        }, 2000); //after 2 seconds the data will be displayed
+      })
+      .catch(err => {
+        if (isMounted) {
+          setError(err.message);
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]); //here in the array of dependencies it is safe to put 'id' because it is not going to be changed by us
 
-  console.log('show', show);
+  if (isloading) {
+    return <div>Data is being loaded</div>;
+  }
+
+  if (error) {
+    return <div>Error occurred:{error}</div>;
+  }
   return <div>This is show component</div>;
 };
 
