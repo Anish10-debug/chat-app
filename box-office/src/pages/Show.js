@@ -20,37 +20,64 @@ return ()=>{
                             //this is how useffect works
 }
 },[])*/
-import React, { useEffect, useState } from 'react';
+
+//useReducer is similar to useState
+//reducer is used in case of complex objects(which contain nested objects or arrays.. etc)
+import React, { useEffect, useReducer } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiGet } from '../misc/config';
+
+const reducer = (prevState, action) => {
+  //this is like an update function in useState
+  switch (action.type) {
+    case 'FETCH_SUCCESS': {
+      return { show: action.show, error: null, isLoading: false }; //if fetch succesful then edit state
+    }
+    case 'FETCH_FAILED': {
+      return { ...prevState, error: action.error, isLoading: false }; //we merge the previous object/state if fetch unsuccessfull
+    }
+  }
+};
+
+const initialState = {
+  show: null,
+  isLoading: true,
+  error: null,
+};
 
 const Show = () => {
   // <Route exact path="/show/:id"></Route> is in Home.js (tvmaze has said to use :id for accessing id)
   const { id } = useParams(); //whatever is written after show/ in the url that will be stored in {id}
-  const [show, setShow] = useState(null); //for storing the results of read more
-  const [isloading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  const [state, dispatch] = useReducer(reducer, initialState); //alternative to useState
+
+  //   const [show, setShow] = useState(null); //for storing the results of read more
+  //   const [isloading, setIsLoading] = useState(true);
+  //   const [error, setError] = useState(null);
+
+  console.log('state', state);
   useEffect(() => {
-    const isMounted = true; //check if component is mounted or not
+    let isMounted = true; //check if component is mounted or not
     apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`)
       .then(results => {
         setTimeout(() => {
           if (isMounted) {
-            setShow(results);
-            setIsLoading(false);
+            dispatch({ type: 'FETCH_SUCCESS', show: results });
+            // setShow(results);
+            // setIsLoading(false);
           }
         }, 2000); //after 2 seconds the data will be displayed
       })
       .catch(err => {
         if (isMounted) {
-          setError(err.message);
-          setIsLoading(false);
+          dispatch({ type: 'FETCH_FAILED', error: err.message });
+          //   setError(err.message);
+          //   setIsLoading(false);
         }
       });
 
     return () => {
-      isMounted = false;
+      isMounted == false;
     };
   }, [id]); //here in the array of dependencies it is safe to put 'id' because it is not going to be changed by us
 
