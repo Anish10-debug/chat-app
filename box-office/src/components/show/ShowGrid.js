@@ -1,14 +1,17 @@
 /*eslint-disable*/
 import React from 'react';
 import ShowCard from './ShowCard';
+
+import { FlexGrid } from '../styled';
+
 import IMAGE_NOT_FOUND from '../../images/not-found.png';
 
 //we will pass the data as a prop from Home.js
 //data will contain an object 'show' which is found from the api
-//we will map show attributes to data and then pass them as props in ShowCard
+//we will map 'show' elements to data and then pass them as props in ShowCard
 const ShowGrid = ({ data }) => {
   return (
-    <div>
+    <FlexGrid>
       {data.map(({ show }) => (
         <ShowCard
           key={show.id}
@@ -18,7 +21,7 @@ const ShowGrid = ({ data }) => {
           summary={show.summary}
         />
       ))}
-    </div>
+    </FlexGrid>
   );
 };
 
