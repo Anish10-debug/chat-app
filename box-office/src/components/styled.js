@@ -46,7 +46,11 @@ export const Star = styled.div`
   display: inline-block;
   width: 18px;
   height: 18px;
-  background-color: #ffc806;
+  /* background-color: #ffc806; */
+  background-color: ${props =>
+    props.active
+      ? '#ffc806'
+      : '#ddd'}; //if star is active then yellow otherwise grey
   clip-path: polygon(
     50% 0%,
     61% 35%,
