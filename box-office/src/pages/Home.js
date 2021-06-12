@@ -4,6 +4,11 @@ import ActorGrid from '../components/actor/ActorGrid';
 import MainPageLayout from '../components/MainPageLayout';
 import ShowGrid from '../components/show/ShowGrid';
 import { apiGet } from '../misc/config';
+import {
+  RadioInputsWrapper,
+  SearchButtonWrapper,
+  SearchInput,
+} from './Home.styled';
 
 const Home = () => {
   const [input, setInput] = useState(''); //whatever we type in the textbox will be used as state
@@ -63,7 +68,7 @@ const Home = () => {
   //value is stored as {input} which is the current state. On typing something the state will be changed
   return (
     <MainPageLayout>
-      <input
+      <SearchInput
         type="text"
         placeholder="Search for something"
         onChange={onInputChange}
@@ -71,32 +76,39 @@ const Home = () => {
         value={input}
       />
 
-      <div>
-        <label>
-          Shows
-          <input
-            type="radio"
-            id="shows"
-            name="choice"
-            value="shows"
-            onChange={onSelectRadio}
-          />
-        </label>
+      <RadioInputsWrapper>
+        <div>
+          <label>
+            Shows
+            <input
+              type="radio"
+              id="shows"
+              name="choice"
+              value="shows"
+              onChange={onSelectRadio}
+            />
+          </label>
+        </div>
 
-        <label>
-          Actor
-          <input
-            type="radio"
-            id="actors"
-            name="choice"
-            value="people"
-            onChange={onSelectRadio}
-          />
-        </label>
-      </div>
-      <button type="button" onClick={onSearch}>
-        Search
-      </button>
+        <div>
+          <label>
+            Actor
+            <input
+              type="radio"
+              id="actors"
+              name="choice"
+              value="people"
+              onChange={onSelectRadio}
+            />
+          </label>
+        </div>
+      </RadioInputsWrapper>
+
+      <SearchButtonWrapper>
+        <button type="button" onClick={onSearch}>
+          Search
+        </button>
+      </SearchButtonWrapper>
       {renderResults()}
     </MainPageLayout>
   );
