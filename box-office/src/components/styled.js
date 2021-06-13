@@ -1,10 +1,11 @@
 /*eslint-disable*/
 import styled from 'styled-components';
+import FadeIn from 'react-fade-in';
 // we use styled-components because the style will be limited to specific components
 //unlike css in which the scope is global
 
 //NOTE: React component must always start with an uppercase letter otherwise it wont render
-export const FlexGrid = styled.div`
+export const FlexGrid = styled(FadeIn)`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;

@@ -1,5 +1,5 @@
 /*eslint-disable*/
-const API_BASE_URL = 'http://api.tvmaze.com';
+const API_BASE_URL = 'https://api.tvmaze.com';
 
 export async function apiGet(queryString) {
   //https://api.tvmaze.com/search/shows?q=men
