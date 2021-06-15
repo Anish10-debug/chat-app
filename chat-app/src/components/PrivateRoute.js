@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React from 'react';
-import { Redirect } from 'react-router';
+import { Redirect, Route } from 'react-router';
 
 const PrivateRoute = ({ children, ...routeProps }) => {
   const profile = false;
