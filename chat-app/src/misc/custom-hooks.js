@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 export function useModalState(defaultValue = false) {
   //this will be set to false if parameter is undefined while calling
@@ -12,3 +12,25 @@ export function useModalState(defaultValue = false) {
 
   return { isOpen, open, close };
 }
+
+// usage
+// const is992px = useMediaQuery('(max-width: 992px)')
+//this function is for the sidebar
+
+export const useMediaQuery = query => {
+  const [matches, setMatches] = useState(
+    () => window.matchMedia(query).matches
+  );
+
+  useEffect(() => {
+    const queryList = window.matchMedia(query);
+    setMatches(queryList.matches);
+
+    const listener = evt => setMatches(evt.matches);
+
+    queryList.addListener(listener);
+    return () => queryList.removeListener(listener);
+  }, [query]);
+
+  return matches;
+};
