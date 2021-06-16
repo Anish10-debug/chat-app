@@ -31,7 +31,6 @@ const EditableInput = ({
     if (trimmed != initialValue) {
       await onSave(trimmed); //if the new name and previous name dont match i.e if there is some change
       //we pass this trimmed value to onSave function
-      Alert.info('Changes have been made', 4000);
     }
 
     setIsEditable(false);
