@@ -1,12 +1,15 @@
 /*eslint-disable*/
 import React from 'react';
-import { Icon, Button, Drawer, Divider, Alert } from 'rsuite';
+import { Button, Drawer, Divider, Alert } from 'rsuite';
 import { useProfile } from '../../context/profile.context';
 import { database } from '../../misc/firebase';
+import AvatarUploadBtn from './AvatarUploadBtn';
 import EditableInput from './EditableInput';
 
 //Here we will style the drawer and also provide options to change profile name and sign out
 const Dashboard = ({ onSignout }) => {
+  const { profile } = useProfile();
+
   const onSave = async newData => {
     //console.log(newData);
     const userNicknameRef = database
@@ -20,7 +23,7 @@ const Dashboard = ({ onSignout }) => {
       Alert.error(err.message, 4000);
     }
   };
-  const { profile } = useProfile();
+
   return (
     <>
       <Drawer.Header>
@@ -35,6 +38,7 @@ const Dashboard = ({ onSignout }) => {
           onSave={onSave}
           label={<h6 className="mb-2">Nickname</h6>}
         />
+        <AvatarUploadBtn />
       </Drawer.Body>
 
       <Drawer.Footer>
