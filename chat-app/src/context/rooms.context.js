@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { database } from '../misc/firebase';
 import { transfromToArrWithId } from '../misc/helpers';
 
@@ -11,14 +11,18 @@ export const RoomsProvider = ({ children }) => {
 
     roomListRef.on('value', snap => {
       const roomData = transfromToArrWithId(snap.val());
-      console.log('Room Data', roomData);
+      //console.log('Room Data', roomData);
+      setRooms(roomData);
     });
 
     return () => {
       roomListRef.off();
     };
-  });
+  }, []);
+
   return (
-    <RoomsContext.Provider value="hello">{children}</RoomsContext.Provider>
+    <RoomsContext.Provider value={rooms}>{children}</RoomsContext.Provider>
   );
 };
+
+export const useRooms = () => useContext(RoomsContext);
