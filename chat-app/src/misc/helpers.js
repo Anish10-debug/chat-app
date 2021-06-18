@@ -9,3 +9,13 @@ export function getNameInitials(name) {
 
   return splitName[0][0]; //if we have only one word
 }
+
+export function transfromToArrWithId(snapVal) {
+  //in this function we are trying to convert the object returned from snap.val() into an array of room ids
+  //each room id in the array will contain the information about the room
+  return snapVal
+    ? Object.keys(snapVal).map(roomId => {
+        return { ...snapVal[roomId], id: roomId }; //put id as an attribute alongwith whole snapval[roomId] object
+      })
+    : [];
+}
