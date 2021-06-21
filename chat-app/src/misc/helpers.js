@@ -19,3 +19,34 @@ export function transfromToArrWithId(snapVal) {
       })
     : [];
 }
+
+export async function getUserUpdates(userId, keyToUpdate, value, db) {
+  const updates = {};
+
+  updates[`/profiles/${userId}/${keyToUpdate}`] = value;
+
+  const getMsgs = db
+    .ref('/messages')
+    .orderByChild('author/uid')
+    .equalTo(userId)
+    .once('value');
+
+  const getRooms = db
+    .ref('/rooms')
+    .orderByChild('lastMessage/author/uid')
+    .equalTo(userId)
+    .once('value');
+
+  //now we have to promises getMsgs and getRooms. We neet to await them
+  const [mSnap, rSnap] = await Promise.all([getMsgs, getRooms]);
+
+  mSnap.forEach(msgSnap => {
+    updates[`/messages/${msgSnap.key}/author/${keyToUpdate}`] = value;
+  });
+
+  rSnap.forEach(roomSnap => {
+    updates[`/rooms/${roomSnap.key}/lastMessage/author/${keyToUpdate}`] = value;
+  });
+
+  return updates;
+}
