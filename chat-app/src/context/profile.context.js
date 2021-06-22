@@ -54,7 +54,9 @@ export const ProfileProvider = ({ children }) => {
 
         database.ref('.info/connected').on('value', snapshot => {
           // If we're not currently connected, don't do anything.
-          if (snapshot.val() == false) {
+          //Here snapshot.val() may not necessarily be boolean
+          //so to convert it into boolean we put !! before snapshot.val() for proper comparison
+          if (!!snapshot.val() == false) {
             return;
           }
 
