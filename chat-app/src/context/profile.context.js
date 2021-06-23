@@ -35,6 +35,7 @@ export const ProfileProvider = ({ children }) => {
         //this callback will run
         //'on' function will return snapshot which will give us data
         //from the database in the form of javascript object
+        console.log(authObj.uid);
         userStatusRef = database.ref(`/status/${authObj.uid}`);
         userRef = database.ref(`/profiles/${authObj.uid}`);
         userRef.on('value', snap => {

@@ -6,6 +6,7 @@ import { useMediaQuery } from '../../../misc/custom-hooks';
 import { Icon, ButtonToolbar } from 'rsuite';
 import { Link } from 'react-router-dom';
 import RoomInfoBtnModal from './RoomInfoBtnModal';
+import EditRoomBtnDrawer from './EditRoomBtnDrawer';
 
 const Top = () => {
   //NOTE: Provider trigger re-renders only if the context value is referentially changed.
@@ -15,8 +16,10 @@ const Top = () => {
   const name = useCurrentRoom(value => value.name);
   //what this does is... the component will not rerender when description gets updated
 
+  const isAdmin = useCurrentRoom(value => value.isAdmin);
   const isMobile = useMediaQuery('(max-width: 992px)');
-
+  //if the user is an admin only then EditRoomBtnModal will be able to see option of edit room
+  //--------------------------------------------------------------------------------------------------
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center">
@@ -34,7 +37,9 @@ const Top = () => {
           />
           <span className="text-disappear"> {name}</span>
         </h4>
-        <ButtonToolbar className="ws-nowrap">todo</ButtonToolbar>
+        <ButtonToolbar className="ws-nowrap">
+          {isAdmin && <EditRoomBtnDrawer />}
+        </ButtonToolbar>
       </div>
 
       <div className="d-flex justify-content-between align-items-center">

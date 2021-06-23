@@ -18,6 +18,8 @@ import { database } from '../misc/firebase';
 const { StringType } = Schema.Types;
 
 const model = Schema.Model({
+  //here we are defining a schema for our form
+  //constraints for our form are as follows
   name: StringType().isRequired('Chat name is required'),
   description: StringType().isRequired('Description is required'),
 });
@@ -35,11 +37,16 @@ const CreateRoomBtnModal = () => {
   const formRef = useRef();
 
   const onFormChange = useCallback(value => {
+    //the thing about using onChange on rsuit components is that
+    //it gives us the value of the entire form (not the input) directly as an argument
+    //no need to use 'ev' for accessing the value
     setFormValue(value);
   }, []);
 
   const onSubmit = async () => {
     if (!formRef.current.check()) {
+      //if not matching the schema
+      //.current.check will validate our form value based on the defined schema and returns true/false
       Alert.info('Returned', 4000);
       return;
     }
@@ -48,6 +55,9 @@ const CreateRoomBtnModal = () => {
     const newRoomData = {
       ...formValue,
       createdAt: firebase.database.ServerValue.TIMESTAMP,
+      admins: {
+        [auth.currentUser.uid]: true, //when we create a room then we will be the admins
+      },
     };
 
     try {
@@ -55,8 +65,8 @@ const CreateRoomBtnModal = () => {
 
       Alert.success(`${formValue.name} has been created`, 4000);
       setIsLoading(false);
-      setFormValue(INITIAL_FORM);
-      close();
+      setFormValue(INITIAL_FORM); //after entering the data and submitting, reset it
+      close(); //close the modal window
     } catch (err) {
       setIsLoading(false);
       Alert.error(err.message, 4000);

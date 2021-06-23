@@ -7,6 +7,8 @@ import ChatTop from '../../components/chat-window/top';
 import ChatBottom from '../../components/chat-window/bottom';
 import { useRooms } from '../../context/rooms.context';
 import { CurrentRoomProvider } from '../../context/current-room.context';
+import { transformToArr } from '../../misc/helpers';
+import { auth } from '../../misc/firebase';
 
 const Chat = () => {
   const { chatId } = useParams(); //returns chatId from the url
@@ -17,7 +19,7 @@ const Chat = () => {
     return <Loader center vertical size="md" content="Loading" speed="slow" />;
   }
 
-  const currentRoom = rooms.find(room => room.id === chatId);
+  const currentRoom = rooms.find(room => room.id === chatId); //if chat id matches room id then we get info abt room
 
   if (!currentRoom) {
     //if we enter any random url then..
@@ -25,9 +27,15 @@ const Chat = () => {
   }
 
   const { name, description } = currentRoom;
+
+  const admins = transformToArr(currentRoom.admins); //array of all admins
+  const isAdmin = admins.includes(auth.currentUser.uid);
+
   const currentRoomData = {
     name,
     description,
+    admins,
+    isAdmin,
   };
 
   return (
